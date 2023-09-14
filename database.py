@@ -1,5 +1,6 @@
 import sqlite3
 from pydantic import BaseModel
+from typing import Optional
 
 def setup_connection():
     con = sqlite3.connect("database.db")
@@ -8,7 +9,7 @@ def setup_connection():
     return {"message": "Connection setted up"}
 
 class Account(BaseModel):
-    id:int
+    id: Optional[int] = None
     name:str
     BRL: float
 
@@ -27,21 +28,21 @@ def get_accounts():
     cursor = con.cursor()
     resp = cursor.execute("SELECT * FROM Accounts").fetchall()
     con.close()
-    return {"data": resp}
+    return resp
 
 def get_account(account_id:int):
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
     resp = cursor.execute(f"SELECT * FROM Accounts WHERE id={account_id}").fetchone()
     con.close()
-    return {"data": resp}
+    return resp
 
 def get_saldo(account_id:int):
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
-    resp = cursor.execute(f"SELECT * FROM Accounts WHERE id={account_id}").fetchone()
+    resp = cursor.execute(f"SELECT BRL FROM Accounts WHERE id={account_id}").fetchone()[0]
     con.close()
-    return {"data": resp}
+    return resp
 
 def update_account(account: Account):
     con = sqlite3.connect("database.db")
@@ -70,18 +71,21 @@ if __name__ == '__main__':
     # print( update_account(1, new_name="abelardo", new_BRL=15.5) )
     # print( delete_account(2) )
 
-    # print( get_account(3) )
+    # print( get_account(31234) )
 
     # get all accounts:
     #for account in get_accounts()["data"]:
     #   print(account)
 
-    print(
-        get_account(account_id=1)['data'][0]
-    )
-
     # a  = get_account(1)["data"]
     # print(len(a))
+
+    newAccount = {
+        'name': "AAAA",
+        "BRL": 91
+    }
+
+    print( type(newAccount) )
 
     
     pass
