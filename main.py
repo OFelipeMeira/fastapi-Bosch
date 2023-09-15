@@ -9,7 +9,6 @@ app = FastAPI()
 """ WORKS """
 @app.post("/register")
 def create_account(account: database.Account):
-    # account = json.loads(account)
     if account:
         database.new_account(account=account)
         return {'message': f"Account {account.name} created"}
@@ -24,24 +23,24 @@ def get_accounts():
 
 """ WORKS """
 @app.get("/account/{account_id}")
-def get_account(account_id:int ):
+def get_account(account_id:int):
     response = database.get_account(account_id=account_id)
     return {'message':'Data returned', 'data': response}
 
 """ WORKS """
 @app.put("/update")
 def update_account(account: database.Account):
-    # a = len(account.model_fields)
-    # print("-"*30)
-    # print(a)
-    # print("-"*30)
     try:
         if database.get_account(account.id) != None:
             database.update_account(account=account)
             return {"message": "Account updated"}
-        return {'message': "Account id not found"}
-    except :
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Formato do objecto não suportado")
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="ID não encontrado")
+    
+    except Exception as e:
+        # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Formato do objecto não suportado")
+        print(e)
+        return e
 
 
 """ WORKS """
