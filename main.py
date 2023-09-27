@@ -27,10 +27,19 @@ async def get_accounts():
     return {'message':'Data returned', 'data': response}
 
 """ WORKS """
-@app.get("/account/{account_id}")
-async def get_account(account_id:int):
-    response = database.get_account(account_id=account_id)
+@app.get("/account/{account_CPF}")
+async def get_account(account_CPF:str):
+    account_CPF = account_CPF.replace(".","").replace("-","").upper()
+
+    response = database.get_account(account_CPF=account_CPF)
     return {'message':'Data returned', 'data': response}
+
+""" WORKS """
+@app.delete("/delete/{account_CPF}")
+async def delete_account(account_CPF:str):
+    account_CPF = account_CPF.replace(".","").replace("-","").upper()
+    database.delete_account(account_CPF=account_CPF)
+    return {"message": "Account deleted"}
 
 """ SEMI WORKS """
 """ PRECISA VERIFICAR SE TEM O ID NO BANCO"""
@@ -49,13 +58,6 @@ async def update_account(account: database.Account):
             print(e)
     else:
         raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Formato do objeto não suportado")
-
-
-""" WORKS """
-@app.delete("/delete/{account_id}")
-async def delete_account(account_id:int):
-    database.delete_account(account_id=account_id)
-    return {"message": "Account deleted"}
 
 """ WORKS """
 @app.get("/convert/{account_id}")
