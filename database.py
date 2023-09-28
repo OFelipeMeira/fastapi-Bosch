@@ -8,13 +8,18 @@ class Account(BaseModel):
     name:str
     BRL: float
     CPF: str
+    
 
 def setup_connection():
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
-    cursor.execute("Create Table Accounts ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, BRL DOUBLE, CPF TEXT );")
+    cursor.execute(""" Create Table Accounts(
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   name TEXT NOT NULL ,
+                   BRL DOUBLE NOT NULL ,
+                   CPF TEXT NOT NULL UNIQUE
+                   );""")
 
-#def new_account(name: str, BRL: float):
 def new_account(account:Account):
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
@@ -46,8 +51,22 @@ def get_saldo(account_CPF:str):
     account_CPF = account_CPF.replace(".","").replace("-","").upper()
 
     resp = cursor.execute(f"SELECT BRL FROM Accounts WHERE CPF={account_CPF}").fetchone()[0]
+    cursor.close()
     con.close()
     return resp
+
+def get_CPF(cpf:str):
+    con = sqlite3.connect("database.db")
+    cursor = con.cursor()
+    resp = cursor.execute(f"SELECT name FROM Accounts WHERE CPF={cpf}").fetchall()
+
+    cursor.close()
+    con.close()
+
+    if len(resp) > 0:
+        return True
+    else:
+        return False
 
 def update_account(account: Account):
 
@@ -81,4 +100,3 @@ if __name__=="__main__":
     # setup_connection()
 
     print( get_accounts() )
-

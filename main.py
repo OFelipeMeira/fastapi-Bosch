@@ -42,19 +42,23 @@ async def get_account(account_CPF:str):
 async def delete_account(account_CPF:str):
 #            /delete/12345678911
 #            /delete/123.456.789-11
-    account_CPF = account_CPF.replace(".","").replace("-","").upper()
-    database.delete_account(account_CPF=account_CPF)
-    return {"message": "Account deleted"}
+    if database.get_CPF(account_CPF):
+        account_CPF = account_CPF.replace(".","").replace("-","").upper()
+        database.delete_account(account_CPF=account_CPF)
+        return {"message": "Account deleted"}
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Account not found")
 
 
 @app.put("/update")
 async def update_account(account: database.Account):
+#         /update
     if account.CPF != "":
         try:
             database.update_account(account=account)
             return {"message": "Account updated"}
         except:
-            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Formato do objeto não suportado")
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Unsuported object format")
 
 
 @app.get("/account/{account_CPF}/convert")
