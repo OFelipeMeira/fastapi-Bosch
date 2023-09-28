@@ -35,6 +35,7 @@ def get_account(account_CPF:str):
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
     account_CPF = account_CPF.replace(".","").replace("-","").upper()
+
     resp = cursor.execute(f"SELECT * FROM Accounts WHERE CPF='{account_CPF}'").fetchone()
     con.close()
     return resp
@@ -43,15 +44,20 @@ def get_saldo(account_CPF:str):
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
     account_CPF = account_CPF.replace(".","").replace("-","").upper()
-    resp = cursor.execute(f"SELECT BRL FROM Accounts WHERE id={account_CPF}").fetchone()[0]
+
+    resp = cursor.execute(f"SELECT BRL FROM Accounts WHERE CPF={account_CPF}").fetchone()[0]
     con.close()
     return resp
 
 def update_account(account: Account):
+
+    print(account.CPF)
+
     con = sqlite3.connect("database.db")
     cursor = con.cursor()
+    account.CPF = account.CPF.replace(".","").replace("-","").upper()
 
-    cursor.execute(f"UPDATE Accounts SET name='{account.name}', BRL={account.BRL}  WHERE id={account.id}")
+    cursor.execute(f"UPDATE Accounts SET name='{account.name}', BRL={account.BRL}  WHERE CPF={account.CPF}")
 
     con.commit()
     con.close()
@@ -73,10 +79,6 @@ def print_data(table):
 
 if __name__=="__main__":
     # setup_connection()
-    
-    print(get_accounts())
 
-    # print_data( get_accounts() )
-    # print( get_account("XXX.XXX.XXX-XX") )
-
+    print( get_accounts() )
 

@@ -6,67 +6,66 @@ import json
 
 app = FastAPI()
 
-""" WORKS """
 @app.get("/")
 async def home():
     return {"message": "Hello Word"}
 
-""" WORKS """
+
 @app.post("/register")
 async def create_account(account: database.Account):
+#         /register
     if account:
         database.new_account(account=account)
         return {'message': f"Account {account.name} created"}
     else:
-        return {'message': f"Account {account.name} not created"}
+        return {'message': f"Account not created"}
 
-""" WORKS """
+
 @app.get("/accounts")
 async def get_accounts():
+#         /accounts
     response = database.get_accounts()
     return {'message':'Data returned', 'data': response}
 
-""" WORKS """
+
 @app.get("/account/{account_CPF}")
 async def get_account(account_CPF:str):
+#         /account/12345678911
+#         /account/123.456.789-11
     account_CPF = account_CPF.replace(".","").replace("-","").upper()
 
     response = database.get_account(account_CPF=account_CPF)
     return {'message':'Data returned', 'data': response}
 
-""" WORKS """
+
 @app.delete("/delete/{account_CPF}")
 async def delete_account(account_CPF:str):
+#            /delete/12345678911
+#            /delete/123.456.789-11
     account_CPF = account_CPF.replace(".","").replace("-","").upper()
     database.delete_account(account_CPF=account_CPF)
     return {"message": "Account deleted"}
 
-""" SEMI WORKS """
-""" PRECISA VERIFICAR SE TEM O ID NO BANCO"""
+
 @app.put("/update")
 async def update_account(account: database.Account):
-    print(f"\033[91m 1 \033[00m")
-    if account.id != None:
-        print(f"\033[91m 2 \033[00m")
+    if account.CPF != "":
         try:
-            print(f"\033[91m 3 \033[00m")
-            list = database.get_accounts()
-            print(list)
             database.update_account(account=account)
             return {"message": "Account updated"}
-        except Exception as e:
-            print(e)
-    else:
-        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Formato do objeto não suportado")
+        except:
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Formato do objeto não suportado")
 
-""" WORKS """
-@app.get("/convert/{account_id}")
-async def convert(account_id:int, quota: str = "" ):  
+
+@app.get("/account/{account_CPF}/convert")
+async def convert(account_CPF:str, quota: str = "" ):  
+#         /account/12345678911/convert
+#         /account/123.456.789-11/convert?quota=BRL
 
     url = "http://api.exchangeratesapi.io/v1/latest?access_key=ee694924a67ecd528d6cc2288d7cf245&format=2"    
     response = requests.get(url=url).json()
 
-    saldo_BRL = database.get_saldo(account_id=account_id)
+    saldo_BRL = database.get_saldo(account_CPF)
     valor_BRL = response["rates"]["BRL"]
 
     if quota == "":
