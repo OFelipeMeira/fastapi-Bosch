@@ -82,7 +82,6 @@ async def update_account(account: database.Account):
             raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Unsuported object format")
 
 
-
 @app.get("/v1/accounts/{account_CPF}/convert", tags=['Accounts'])
 async def convert(account_CPF:str, quota: str = "" ):  
 #         /v1/accounts/12345678911/convert
@@ -108,18 +107,16 @@ async def convert(account_CPF:str, quota: str = "" ):
         a= response["rates"][quota] * saldo_BRL / valor_BRL
         return {quota:a}
 
-@app.get('/v1/animals', tags=['Friends Endpoint'])
-async def get_animal():
+@app.get('/nic', tags=['Friends Endpoint'])
+async def get_clima():
     """
     Method to get an someone else endpoint
     :param: ip - IP from the other device
     :param: port - Port of the aplication
     :param: route - the endpoint to get
     """
-    ip = '10.21.56.27'
-    port = '8001'
-    route = '/animais'
-    url = 'http://'+ip+':'+port+route
+
+    url = 'http://10.21.56.27:8001/clima-completo/valinhos'
 
     response = requests.get(url=url).json()
     
