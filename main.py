@@ -2,11 +2,10 @@ from fastapi import FastAPI, HTTPException, status, Response
 import uvicorn
 import database
 import requests
-import json
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/", tags=['Accounts'])
 async def home():
     """
     Method to test Api connection - 'Hello World'
@@ -14,7 +13,7 @@ async def home():
     return {"message": "Hello Word"}
 
 
-@app.post("/register")
+@app.post("/v1/accounts", tags=['Accounts'])
 async def create_account(account: database.Account):
 #         /register
     """
@@ -28,9 +27,9 @@ async def create_account(account: database.Account):
         return {'message': f"Account not created"}
 
 
-@app.get("/accounts")
+@app.get("/v1/accounts", tags=['Accounts'])
 async def get_accounts():
-#         /accounts
+#         /v1/accountss
     """
     Method to return all accounts from the database
     """
@@ -38,10 +37,10 @@ async def get_accounts():
     return {'message':'Data returned', 'data': response}
 
 
-@app.get("/account/{account_CPF}")
+@app.get("/v1/accounts/{account_CPF}", tags=['Accounts'])
 async def get_account(account_CPF:str):
-#         /account/12345678911
-#         /account/123.456.789-11
+#         /v1/accounts/12345678911
+#         /v1/accounts/123.456.789-11
     """
     Method to return a single account, searching by CPF
     :path param: account_CPF - CPF from the register to return
@@ -52,7 +51,7 @@ async def get_account(account_CPF:str):
     return {'message':'Data returned', 'data': response}
 
 
-@app.delete("/delete/{account_CPF}")
+@app.delete("/v1/accounts/{account_CPF}", tags=['Accounts'])
 async def delete_account(account_CPF:str):
 #            /delete/12345678911
 #            /delete/123.456.789-11
@@ -68,7 +67,7 @@ async def delete_account(account_CPF:str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Account not found")
 
 
-@app.put("/update")
+@app.put("/v1/accounts", tags=['Accounts'])
 async def update_account(account: database.Account):
 #         /update
     """
@@ -83,10 +82,11 @@ async def update_account(account: database.Account):
             raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Unsuported object format")
 
 
-@app.get("/account/{account_CPF}/convert")
+
+@app.get("/v1/accounts/{account_CPF}/convert", tags=['Accounts'])
 async def convert(account_CPF:str, quota: str = "" ):  
-#         /account/12345678911/convert
-#         /account/123.456.789-11/convert?quota=BRL
+#         /v1/accounts/12345678911/convert
+#         /v1/accounts/123.456.789-11/convert?quota=BRL
     """
     Method to get the money from an account and convert to other quoatas
         - if has no query parameters, return all convertions
@@ -107,6 +107,23 @@ async def convert(account_CPF:str, quota: str = "" ):
     else:
         a= response["rates"][quota] * saldo_BRL / valor_BRL
         return {quota:a}
+
+@app.get('/v1/animals', tags=['Friends Endpoint'])
+async def get_animal():
+    """
+    Method to get an someone else endpoint
+    :param: ip - IP from the other device
+    :param: port - Port of the aplication
+    :param: route - the endpoint to get
+    """
+    ip = '10.21.56.27'
+    port = '8001'
+    route = '/animais'
+    url = 'http://'+ip+':'+port+route
+
+    response = requests.get(url=url).json()
+    
+    return {'message':'Data returned', 'data': response}
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
