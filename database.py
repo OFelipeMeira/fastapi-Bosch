@@ -4,7 +4,6 @@ from typing import Optional
 from prettytable import *
 
 class Account(BaseModel):
-    id: Optional[int] = None
     name:str
     BRL: float
     CPF: str
