@@ -1,5 +1,6 @@
 """
     General Configs File
+    Defining configs
 """
 
 from pydantic.v1 import BaseSettings
@@ -25,4 +26,4 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 settings = Settings()
-# importing this file i can have acces to all the configs
+# importing this file can have acces to all the configs
