@@ -14,7 +14,6 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # importing the settings object created on configs.py
-# from .configs import settings
 from core.configs import settings
 
 # creating a connection with the database

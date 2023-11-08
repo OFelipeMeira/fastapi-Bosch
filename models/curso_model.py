@@ -1,5 +1,5 @@
 """
-    Dependencies file
+    File from the model 'curso'
 """
 
 # To Test ------------------------------------------------------------------------- #
@@ -8,13 +8,13 @@ default_path = "C:\\Users\\CT67CA\\Desktop\\Temp Felipe DS6\\Python\\fastapi-Bos
 sys.path.append(default_path)                                                       #
 # --------------------------------------------------------------------------------- # 
 
-from typing import Generator
-from sqlalchemy.ext.asyncio import AsyncSession
-from core.database import Session
+from core.configs import settings
+from sqlalchemy import Column, Integer, String
 
-async def get_session() -> Generator:
-    session: AsyncSession = Session()
-    try:
-        yield session
-    finally:
-        await session.close()
+class CursoModel(settings.DBBaseModel):
+    __tablename__ = "curso"
+    id:        int = Column(Integer, primary_key=True, autoincrement=True)
+    titulo:    str = Column(String(100))
+    instrutor: str = Column(String(100))
+    horas:     int = Column(Integer)
+    aulas:     int = Column(Integer)
