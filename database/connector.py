@@ -1,15 +1,16 @@
 from tortoise import Tortoise
+from core.configs import settings
 
 async def init():
     await Tortoise.init(
-        db_url="mysql://root@127.0.0.1:3306/etscursos",
+        db_url=settings.DB_URL,
         modules={ 'models': ['database.models'] }
     )
     await Tortoise.generate_schemas()
 
 async def connect():
     await Tortoise.init(
-        db_url="mysql://root@127.0.0.1:3306/etscursos",
+        db_url=settings.DB_URL,
         modules={ 'models': ['database.models'] }
     )
 

@@ -1,9 +1,4 @@
-# from fastapi import FastAPI
-# # from core.configs import settings
-# from api.v1._api import api_router
 
-# app = FastAPI(title="API de Cursos da ETS")
-# app.include_router(api_router, prefix=settings.API_V1_STR)
 
 def api_deezer():
     import requests
@@ -30,13 +25,19 @@ def api_deezer():
 
 
 async def create_db():
-    await configs.init()
+    from database import connector
+    await connector.init()
+
+
+
+
+from core.configs import settings
+from api.v1._api import api_router
+from fastapi import FastAPI
+app = FastAPI()
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 if __name__ == '__main__':
-    # import uvicorn
-    # uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level='info', reload=True)
-    from database import configs
-    import asyncio
+    import uvicorn
 
-    asyncio.run(create_db())
-    
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level='info', reload=True)
