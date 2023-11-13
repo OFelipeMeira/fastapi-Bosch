@@ -1,0 +1,10 @@
+Estrutura banco tortoise
+
+Banco
+
+Adapter - converte JSON em Model  ---Schemas
+
+Service - reescreve funções do ORM
+
+Factory -  inicia o adapter e service
+Endpoints - chama funções do Factory
