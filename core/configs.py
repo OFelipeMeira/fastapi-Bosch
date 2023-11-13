@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     # connection string - in this case using root as user, don't need a password
     # SqlAlchemy template: dialect+driver://username:password@host:port/database
-    DB_URL: str = 'mysql+asyncmy://root@127.0.0.1:3306/etscursos'
+    DB_URL: str = 'mysql+asyncmy://root@127.0.0.1:3306/account'
     
     # for all models inherit all resources from sqlalchemy
     DBBaseModel = declarative_base()

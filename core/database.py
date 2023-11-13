@@ -2,12 +2,6 @@
     Creating a connection
 """
 
-# # To Test ------------------------------------------------------------------------- #
-# import sys                                                                          #
-# default_path = "C:\\Users\\CT67CA\\Desktop\\Temp Felipe DS6\\Python\\fastapi-Bosch" #
-# sys.path.append(default_path)                                                       #
-# # --------------------------------------------------------------------------------- #
-
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncEngine
