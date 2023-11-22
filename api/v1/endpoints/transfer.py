@@ -1,12 +1,10 @@
-from typing import List
-
-from fastapi import APIRouter, status, Depends, HTTPException, Response
+from fastapi import APIRouter, status, Depends, HTTPException
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from models.account_model import AccountModel
-from schemas.account_schema import ValueSchema
+from schemas.transfer_schema import ValueSchema
 from decimal import Decimal
 from core.deps import get_session
 

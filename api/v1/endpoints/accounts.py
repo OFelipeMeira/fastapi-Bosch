@@ -30,11 +30,10 @@ async def get_single_account(account_id:int, db: AsyncSession = Depends(get_sess
 @routerCrud.post('/', status_code=status.HTTP_201_CREATED, response_model=CreateAccountSchema)
 async def create_account(account: CreateAccountSchema, db: AsyncSession = Depends(get_session)):
     new_account = AccountModel(id = 0,
-                                firstName = account.firstName,
-                                lastName = account.lastName,
-                                cpf = account.cpf,
-                                brl = 0,
-                                )
+                               firstName = account.firstName,
+                               lastName = account.lastName,
+                               cpf = account.cpf,
+                               brl = 0)
     db.add(new_account)
     await db.commit()
     return new_account

@@ -17,6 +17,3 @@ class CreateAccountSchema(SchemaBaseModel):
     firstName: str
     lastName:  str
     cpf:       str
-
-class ValueSchema(SchemaBaseModel):
-    value: float
